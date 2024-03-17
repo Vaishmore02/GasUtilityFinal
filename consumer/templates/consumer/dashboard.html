@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        select {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        button[type="submit"] {
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{ user.username }}</h1>
+        
+        <!-- Display User Information -->
+        <h2>User Information:</h2>
+        <p>Email: {{ user.email }}</p>
+        <!-- Add other user information fields as needed -->
+
+        <!-- Service Request Form -->
+        <h2>Submit New Service Request:</h2>
+        <form method="post" action="{% url 'dashboard' %}">
+            {% csrf_token %}
+            <label for="service_type">Service Type:</label>
+            <select id="service_type" name="service_type">
+                <option value="gas_refills">Gas Refills</option>
+                <option value="gas_conflicts">Gas Conflicts</option>
+                <option value="bill_payment">Bill Payment</option>
+                <!-- Add other service types as needed -->
+            </select>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+            <label for="mobile">Mobile Number:</label>
+            <input type="text" id="mobile" name="mobile">
+            <button type="submit">Submit</button>
+        </form>
+
+        <!-- Display Service Requests -->
+        <h2>Service Requests:</h2>
+        <ul>
+            {% for service_request in service_requests %}
+                <li>{{ service_request.service_type }} - {{ service_request.status }} - Token No: {{ service_request.token }}</li>
+            {% empty %}
+                <li>No service requests found.</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Logout Button -->
+        <a href="{% url 'user-logout' %}">Log Out</a>
+    </div>
+</body>
+</html>
+
